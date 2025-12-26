@@ -1,354 +1,283 @@
-<html lang="en" class="scroll-smooth">
+<html class="scroll-smooth" lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Carenest v4 - Modern Caregiver Platform</title>
-
-    <!--- Tailwind CSS --->
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Carenest - Caregiver Booking Platform</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <!-- Fonts: Inter Only (Cleaned up) -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
       rel="stylesheet"
     />
-
     <style>
-      /* Typography & Base */
       body {
-        font-family: "Inter", sans-serif;
         font-feature-settings: "cv02", "cv03", "cv04", "cv11";
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-
-      /* 1. Hero Animation: Moving Dot Grid */
-      .dot-grid-anim {
-        background-image: radial-gradient(#0d9488 1.5px, transparent 1.5px);
-        background-size: 32px 32px;
-        opacity: 0.4;
-        mask-image: radial-gradient(
-          circle at center,
+      /* Square Grid Pattern */
+      .square-grid {
+        background-image: linear-gradient(
+            to right,
+            rgba(203, 213, 225, 0.4) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(203, 213, 225, 0.4) 1px,
+            transparent 1px
+          );
+        background-size: 50px 50px;
+        mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+        -webkit-mask-image: linear-gradient(
+          to bottom,
           black 40%,
-          transparent 80%
+          transparent 100%
         );
-        -webkit-mask-image: radial-gradient(
-          circle at center,
-          black 40%,
-          transparent 80%
-        );
-        animation: moveGrid 20s linear infinite;
       }
 
-      @keyframes moveGrid {
+      /* Hero Ripple Animation (Under Phone) */
+      @keyframes ripple {
         0% {
-          background-position: 0 0;
+          transform: scale(0.78);
+          opacity: 0;
         }
-        50% {
-          background-position: 16px 16px;
+        10% {
+          opacity: 0.5;
+        }
+        70% {
+          opacity: 0.22;
         }
         100% {
-          background-position: 32px 32px;
+          transform: scale(1.15);
+          opacity: 0;
+        }
+      }
+      .animate-ripple {
+        animation: ripple 2s ease-out infinite;
+      }
+      /*breathe animation - hero section*/
+      @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.015); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .animate-\[breathe_5s_ease-in-out_infinite\] {
+          animation: none !important;
         }
       }
 
-      /* 3. Flip Card Utilities */
-      .perspective-1000 {
-        perspective: 1000px;
-      }
-      .preserve-3d {
-        transform-style: preserve-3d;
-      }
-      .backface-hidden {
-        backface-visibility: hidden;
-      }
-      .rotate-y-180 {
-        transform: rotateY(180deg);
-      }
 
-      /* Hover trigger for flip */
-      .group:hover .flip-card-inner {
-        transform: rotateY(180deg);
-      }
-
-      /* 5. Infinite Marquee Animation */
-      @keyframes scroll-marquee {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(-50%);
+      /* Respect reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .animate-ripple,
+        .animate-ping,
+        .animate-bounce,
+        [class*="animate-"] {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
         }
       }
-      .animate-marquee {
-        animation: scroll-marquee 40s linear infinite;
-      }
-      .animate-marquee:hover {
-        animation-play-state: paused;
-      }
 
-      /* Hide scrollbar for cleaner UI */
-      .no-scrollbar::-webkit-scrollbar {
+      /* Timeline Animation Styles */
+      .timeline-line-fill {
+        height: 0;
+        transition: height 4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .timeline-step {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease-out;
+      }
+      .timeline-step.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      /* Accordion Marker Hide */
+      details > summary {
+        list-style: none;
+      }
+      details > summary::-webkit-details-marker {
         display: none;
       }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+
+      /* -------------------------------
+   Section scroll-reveal animations
+--------------------------------- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+        will-change: opacity, transform;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-geist"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-geist">
-      .font-geist {
-        font-family: "Geist", sans-serif !important;
+      .reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
       }
-    </style>
-    <link
-      id="all-fonts-link-font-roboto"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-roboto">
-      .font-roboto {
-        font-family: "Roboto", sans-serif !important;
+      .reveal[data-reveal="left"] {
+        transform: translateX(-22px);
       }
-    </style>
-    <link
-      id="all-fonts-link-font-montserrat"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-montserrat">
-      .font-montserrat {
-        font-family: "Montserrat", sans-serif !important;
+      .reveal[data-reveal="right"] {
+        transform: translateX(22px);
       }
-    </style>
-    <link
-      id="all-fonts-link-font-poppins"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-poppins">
-      .font-poppins {
-        font-family: "Poppins", sans-serif !important;
+      .reveal[data-reveal="zoom"] {
+        transform: scale(0.985);
       }
-    </style>
-    <link
-      id="all-fonts-link-font-playfair"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-playfair">
-      .font-playfair {
-        font-family: "Playfair Display", serif !important;
+      .reveal[data-delay="1"] {
+        transition-delay: 60ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-instrument-serif"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-instrument-serif">
-      .font-instrument-serif {
-        font-family: "Instrument Serif", serif !important;
+      .reveal[data-delay="2"] {
+        transition-delay: 120ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-merriweather"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-merriweather">
-      .font-merriweather {
-        font-family: "Merriweather", serif !important;
+      .reveal[data-delay="3"] {
+        transition-delay: 180ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-bricolage"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-bricolage">
-      .font-bricolage {
-        font-family: "Bricolage Grotesque", sans-serif !important;
+      .reveal[data-delay="4"] {
+        transition-delay: 240ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-jakarta"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-jakarta">
-      .font-jakarta {
-        font-family: "Plus Jakarta Sans", sans-serif !important;
+
+      /* Stagger children inside key layouts */
+      .stagger > * {
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity 650ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+        will-change: opacity, transform;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-manrope"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-manrope">
-      .font-manrope {
-        font-family: "Manrope", sans-serif !important;
+      .stagger.is-visible > * {
+        opacity: 1;
+        transform: translateY(0);
       }
-    </style>
-    <link
-      id="all-fonts-link-font-space-grotesk"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-space-grotesk">
-      .font-space-grotesk {
-        font-family: "Space Grotesk", sans-serif !important;
+      .stagger.is-visible > *:nth-child(1) {
+        transition-delay: 0ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-work-sans"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-work-sans">
-      .font-work-sans {
-        font-family: "Work Sans", sans-serif !important;
+      .stagger.is-visible > *:nth-child(2) {
+        transition-delay: 80ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-pt-serif"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-pt-serif">
-      .font-pt-serif {
-        font-family: "PT Serif", serif !important;
+      .stagger.is-visible > *:nth-child(3) {
+        transition-delay: 160ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-geist-mono"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-geist-mono">
-      .font-geist-mono {
-        font-family: "Geist Mono", monospace !important;
+      .stagger.is-visible > *:nth-child(4) {
+        transition-delay: 240ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-space-mono"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-space-mono">
-      .font-space-mono {
-        font-family: "Space Mono", monospace !important;
+      .stagger.is-visible > *:nth-child(5) {
+        transition-delay: 320ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-quicksand"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-quicksand">
-      .font-quicksand {
-        font-family: "Quicksand", sans-serif !important;
+      .stagger.is-visible > *:nth-child(6) {
+        transition-delay: 400ms;
       }
-    </style>
-    <link
-      id="all-fonts-link-font-nunito"
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap"
-    />
-    <style id="all-fonts-style-font-nunito">
-      .font-nunito {
-        font-family: "Nunito", sans-serif !important;
+
+      /* reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .reveal,
+        .stagger > * {
+          transition: none !important;
+          transform: none !important;
+          opacity: 1 !important;
+        }
       }
     </style>
   </head>
   <body
-    class="selection:bg-teal-100 selection:text-teal-900 bg-white text-slate-600"
+    class="bg-white text-slate-600 selection:bg-teal-100 selection:text-teal-900 relative overflow-x-hidden"
   >
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 overflow-hidden -z-10"
+    >
+      <div
+        class="absolute -top-28 -left-28 w-[520px] h-[520px] bg-teal-300/10 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute top-24 -right-40 w-[620px] h-[620px] bg-teal-200/10 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute top-[38%] left-[-200px] w-[460px] h-[460px] bg-teal-300/10 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute top-[55%] right-[-220px] w-[520px] h-[520px] bg-teal-200/10 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute -bottom-40 left-[12%] w-[560px] h-[560px] bg-teal-300/8 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute bottom-24 left-[60%] w-[420px] h-[420px] bg-teal-200/8 rounded-full blur-3xl"
+      ></div>
+    </div>
+
     <!-- Navigation -->
     <nav
-      class="fixed top-0 inset-x-0 z-50 h-16 backdrop-blur-md border-b transition-all bg-white/80 border-slate-200/60"
+      class="fixed top-0 inset-x-0 z-50 h-16 bg-white/90 backdrop-blur-md border-b border-slate-200 transition-all"
     >
       <div
         class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between"
       >
-        <div class="flex items-center gap-2">
+        <a class="flex items-center gap-2 group" href="#top">
           <div
-            class="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm bg-teal-600 text-white"
+            class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center shadow-sm group-hover:bg-teal-600 transition-colors"
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+              class="lucide lucide-heart-handshake w-5 h-5 stroke-[1.5]"
+              data-lucide="heart-handshake"
               fill="none"
+              height="24"
               stroke="currentColor"
-              stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              data-lucide="heart-handshake"
-              class="lucide lucide-heart-handshake w-5 h-5 stroke-[1.5]"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"
               ></path>
             </svg>
           </div>
-          <span class="font-semibold tracking-tight text-lg text-slate-900"
-            >Carenest</span
+          <span class="font-bold tracking-tight text-lg text-slate-900"
+            >CARENEST</span
           >
-        </div>
-
+        </a>
         <div
           class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-500"
         >
-          <a href="#services" class="transition-colors hover:text-teal-600"
-            >Services</a
+          <a class="hover:text-slate-900 transition-colors" href="#features"
+            >Benefits</a
           >
-          <a href="#how-it-works" class="transition-colors hover:text-teal-600"
+          <a class="hover:text-slate-900 transition-colors" href="#process"
             >How it Works</a
           >
-          <a href="#features" class="transition-colors hover:text-teal-600"
+          <a class="hover:text-slate-900 transition-colors" href="#safety"
             >Safety</a
           >
-          <a href="#reviews" class="transition-colors hover:text-teal-600"
-            >Reviews</a
-          >
+          <a class="hover:text-slate-900 transition-colors" href="#faq">FAQ</a>
         </div>
-
         <div class="flex items-center gap-4">
           <a
-            href="#"
-            class="hidden sm:block text-sm font-medium text-slate-600 hover:text-slate-900"
-            >Log in</a
+            class="text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 px-4 py-2 rounded-full transition-all shadow-sm flex items-center gap-2 group"
+            href="#waitlist"
           >
-          <a
-            href="#"
-            class="text-sm font-medium px-4 py-2 rounded-full transition-all shadow-sm flex items-center gap-2 group bg-slate-900 hover:bg-slate-800 text-white shadow-slate-200"
-          >
-            <span>Get Started</span>
+            <span>Join Waitlist</span>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+              class="lucide lucide-arrow-right w-4 h-4 transition-transform group-hover:translate-x-0.5 stroke-[1.5]"
+              data-lucide="arrow-right"
               fill="none"
+              height="24"
               stroke="currentColor"
-              stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              data-lucide="arrow-right"
-              class="lucide lucide-arrow-right w-4 h-4 transition-transform group-hover:translate-x-0.5 stroke-[1.5]"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path d="M5 12h14"></path>
               <path d="m12 5 7 7-7 7"></path>
@@ -357,1825 +286,1212 @@
         </div>
       </div>
     </nav>
-
     <!-- 1. Hero Section -->
     <section
-      class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-white"
+      class="relative pt-28 pb-16 lg:pt-32 lg:pb-20 overflow-hidden reveal"
+      id="top"
     >
-      <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <!-- Background Grid Pattern -->
+      <div class="absolute inset-0 square-grid -z-10"></div>
+      <main
+        class="max-w-7xl mx-auto px-6 md:px-12 py-12 lg:py-16 relative z-10"
+      >
         <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
-          <!-- Left: Content -->
-          <div class="w-full lg:w-1/2 max-w-2xl">
+          <!-- Left Column: Copy -->
+          <div class="flex-1 max-w-2xl pt-4 stagger">
+            <!-- Status Pill -->
             <div
-              class="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold mb-8 shadow-sm bg-teal-50 border-teal-100 text-teal-700"
+              class="inline-flex items-center gap-2 bg-teal-50 border border-teal-100/60 px-3 py-1.5 rounded-full text-xs font-medium text-teal-700 mb-8 shadow-sm shadow-teal-100/50"
             >
               <span class="relative flex h-2 w-2">
                 <span
-                  class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-teal-400"
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"
                 ></span>
                 <span
                   class="relative inline-flex rounded-full h-2 w-2 bg-teal-500"
                 ></span>
               </span>
-              New: Live in Kandy &amp; Galle
+              Launching soon in Sri Lanka
             </div>
-
+            <!-- Main Heading -->
             <h1
-              class="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 leading-[1.1] text-slate-900"
+              class="text-6xl lg:text-[5rem] font-semibold tracking-tight text-slate-900 leading-[1.05] mb-8
+         animate-[breathe_5s_ease-in-out_infinite]"
             >
               Care that feels <br />
               <span
-                class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-400"
+                class="text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-teal-400"
                 >closer to home.</span
               >
             </h1>
-
-            <p class="text-lg text-slate-500 mb-10 leading-relaxed max-w-lg">
-              Bridge the distance with Sri Lanka's most trusted nursing
-              professionals. Verified, experienced, and just a tap away.
-            </p>
-
-            <div class="flex flex-col sm:flex-row items-center gap-4 mb-10">
-              <button
-                class="w-full sm:w-auto h-12 px-8 hover:bg-teal-500 text-sm font-semibold rounded-lg transition-all shadow-lg flex items-center justify-center gap-2 bg-teal-600 text-white shadow-teal-600/20"
+            <!-- Trust Badges -->
+            <div class="flex flex-wrap gap-3 mb-10">
+              <div
+                class="flex items-center gap-2 bg-slate-50 border border-slate-100 px-3 py-2 rounded-lg text-xs font-medium text-slate-600"
               >
-                Find a Caregiver
-              </button>
-              <button
-                class="w-full sm:w-auto h-12 px-8 border text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
+                <i
+                  class="w-4 h-4 text-teal-500"
+                  data-lucide="check-circle-2"
+                ></i>
+                Verified Caregivers
+              </div>
+              <div
+                class="flex items-center gap-2 bg-slate-50 border border-slate-100 px-3 py-2 rounded-lg text-xs font-medium text-slate-600"
+              >
+                <i class="w-4 h-4 text-teal-500" data-lucide="shield-check"></i>
+                Transparent Pricing
+              </div>
+              <div
+                class="flex items-center gap-2 bg-slate-50 border border-slate-100 px-3 py-2 rounded-lg text-xs font-medium text-slate-600"
+              >
+                <i class="w-4 h-4 text-teal-500" data-lucide="map-pin"></i>
+                GPS Check-ins
+              </div>
+            </div>
+            <!-- Subtitle -->
+            <p
+              class="text-lg md:text-xl text-slate-500 leading-relaxed mb-10 max-w-lg font-normal"
+            >
+              Find reliable nursing professionals for your loved ones. We
+              combine rigorous vetting with smart technology to bring you peace
+              of mind, even from miles away.
+            </p>
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-start gap-4 mb-12">
+              <a href="#waitlist">
+                <button
+                  class="bg-slate-900 text-white h-12 px-8 rounded-lg text-base font-medium hover:bg-slate-800 transition-colors shadow-xl shadow-slate-900/10 flex items-center justify-center min-w-[160px]"
+                >
+                  Join the Waitlist
+                </button>
+              </a>
+              <!--second button | hero section-->
+              <a href="#process">
+                <button
+                  class="bg-white border border-slate-200 text-slate-700 h-12 px-6 rounded-lg text-base font-medium hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center gap-2.5 justify-center"
+                >
+                  <i class="w-5 h-5 stroke-[1.5]" data-lucide="play-circle"></i>
+                  See How It Works
+                </button>
+              </a>
+            </div>
+            <!-- Footer Disclaimer -->
+            <p class="text-xs text-slate-400 font-medium tracking-wide">
+              Features may evolve.
+            </p>
+          </div>
+          <!-- Right Column: Visuals -->
+          <div
+            class="flex-1 relative w-full flex justify-center lg:justify-end items-center mt-12 lg:mt-0"
+          >
+            <!-- Decorative Backgrounds -->
+            <div class="relative flex items-center justify-center">
+              <!-- Large Teal Circle Background -->
+              <div
+                class="absolute w-[550px] h-[550px] bg-teal-300/10 rounded-full blur-3xl"
+              ></div>
+              <div
+                class="absolute w-[480px] h-[480px] bg-gradient-to-b from-teal-50 to-teal-100 rounded-full"
+              ></div>
+              <!-- Blinking Circles (Under Phone) -->
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div
+                  class="w-[350px] h-[350px] border border-teal-500/30 rounded-full animate-ripple absolute"
+                ></div>
+                <div
+                  class="w-[350px] h-[350px] border border-teal-500/30 rounded-full animate-ripple delay-1000 absolute"
+                ></div>
+                <div
+                  class="w-[350px] h-[350px] border border-teal-500/30 rounded-full animate-ripple delay-2000 absolute"
+                ></div>
+              </div>
+              <!-- Phone Mockup -->
+              <div
+                class="relative w-[300px] h-[600px] bg-slate-900 rounded-[44px] shadow-2xl p-3 border-[6px] border-slate-900 z-10 transform rotate-1"
+              >
+                <!-- Hardware Buttons -->
+                <div
+                  class="absolute top-28 -right-2 w-1.5 h-14 bg-slate-800 rounded-r-md"
+                ></div>
+                <div
+                  class="absolute top-24 -left-2 w-1.5 h-8 bg-slate-800 rounded-l-md"
+                ></div>
+                <div
+                  class="absolute top-36 -left-2 w-1.5 h-14 bg-slate-800 rounded-l-md"
+                ></div>
+                <!-- Screen Area -->
+                <div
+                  class="w-full h-full bg-slate-50 rounded-[34px] overflow-hidden relative flex flex-col shadow-inner"
+                >
+                  <!-- Status Bar -->
+                  <div
+                    class="h-10 w-full flex items-end justify-between px-6 pb-2 z-20 bg-gradient-to-b from-slate-50 to-transparent"
+                  >
+                    <span
+                      class="text-[11px] font-semibold text-slate-900 tracking-wide ml-1"
+                      >9:41</span
+                    >
+                    <div class="flex items-center gap-1.5">
+                      <div
+                        class="w-3.5 h-2.5 bg-slate-900 rounded-[2px] opacity-20"
+                      ></div>
+                      <div
+                        class="w-3.5 h-2.5 bg-slate-900 rounded-[2px] opacity-20"
+                      ></div>
+                      <div class="w-4 h-2.5 bg-slate-900 rounded-[2px]"></div>
+                    </div>
+                  </div>
+                  <!-- App Content -->
+                  <div class="relative flex-1 w-full h-full">
+                    <!-- Map Elements (Simulated) -->
+                    <div class="absolute inset-0 opacity-40">
+                      <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-slate-200 rounded-full"
+                      ></div>
+                      <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-44 border border-slate-200 rounded-full"
+                      ></div>
+                      <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-teal-100/50 rounded-full blur-xl"
+                      ></div>
+                    </div>
+                    <!-- Center Avatar & Tooltip -->
+                    <div
+                      class="absolute inset-0 flex flex-col items-center justify-center -mt-8"
+                    >
+                      <!-- Tooltip -->
+                      <div
+                        class="bg-white pl-2 pr-4 py-2 rounded-full shadow-sm border border-slate-100 flex items-center gap-2.5 mb-4 animate-[bounce_3s_infinite]"
+                      >
+                        <div
+                          class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"
+                        ></div>
+                        <div class="text-[10px] text-slate-500 font-medium">
+                          Matched:
+                          <span class="text-slate-900 font-semibold"
+                            >Ann Fdo</span
+                          >
+                        </div>
+                      </div>
+                      <!-- Avatar -->
+                      <div class="relative group cursor-pointer">
+                        <div
+                          class="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center overflow-hidden border-[3px] border-white shadow-lg ring-1 ring-slate-100"
+                        >
+                          <img
+                            alt="Caregiver"
+                            class="w-full h-full object-cover"
+                            src="Images/avatar_profile.jpeg"
+                          />
+                        </div>
+                        <!-- Active Badge -->
+                        <div
+                          class="absolute -bottom-1 -right-1 w-5 h-5 bg-teal-500 border-2 border-white rounded-full flex items-center justify-center shadow-sm"
+                        >
+                          <i
+                            class="w-3 h-3 text-white stroke-[4]"
+                            data-lucide="check"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Bottom Floating Card -->
+                  <div class="absolute bottom-6 left-4 right-4 z-20">
+                    <div
+                      class="bg-white rounded-2xl p-4 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100"
+                    >
+                      <div class="flex items-start gap-3.5">
+                        <div
+                          class="w-9 h-9 rounded-full bg-teal-50 flex items-center justify-center shrink-0"
+                        >
+                          <i
+                            class="w-4 h-4 text-teal-600 stroke-[3]"
+                            data-lucide="check"
+                          ></i>
+                        </div>
+                        <div class="flex-1 pt-0.5">
+                          <h3 class="text-xs font-bold text-slate-900 mb-0.5">
+                            Booking Confirmed
+                          </h3>
+                          <p
+                            class="text-[10px] text-slate-500 font-medium leading-tight mb-2.5"
+                          >
+                            Caregiver verified via NIC &amp; NVQ
+                          </p>
+                          <!-- Progress Bar -->
+                          <div
+                            class="w-14 h-1 bg-slate-100 rounded-full overflow-hidden"
+                          >
+                            <div
+                              class="w-full h-full bg-teal-500 rounded-full"
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </section>
+    <!-- 2. Trust Indicators (Replaces Stats) -->
+    <section
+      class="border-y border-slate-100 bg-slate-100 py-10 reveal"
+      data-delay="0.5"
+      data-reveal="zoom"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 stagger">
+          <div
+            class="text-center group hover:bg-slate-50 rounded-xl p-2 transition-colors"
+          >
+            <p class="text-lg font-bold text-slate-900 mb-1">Colombo</p>
+            <p
+              class="text-sm font-medium text-slate-400 uppercase tracking-widest"
+            >
+              Pilot Locations
+            </p>
+          </div>
+          <div
+            class="text-center group hover:bg-slate-50 rounded-xl p-2 transition-colors"
+          >
+            <p class="text-lg font-bold text-slate-900 mb-1">4 Step Vetting</p>
+            <p
+              class="text-sm font-medium text-slate-400 uppercase tracking-widest"
+            >
+              Safety Standard
+            </p>
+          </div>
+          <div
+            class="text-center group hover:bg-slate-50 rounded-xl p-2 transition-colors"
+          >
+            <p class="text-lg font-bold text-slate-900 mb-1">Real-time GPS</p>
+            <p
+              class="text-sm font-medium text-slate-400 uppercase tracking-widest"
+            >
+              Live Updates
+            </p>
+          </div>
+          <div
+            class="text-center group hover:bg-slate-50 rounded-xl p-2 transition-colors"
+          >
+            <p class="text-lg font-bold text-slate-900 mb-1">9am - 6pm</p>
+            <p
+              class="text-sm font-medium text-slate-400 uppercase tracking-widest"
+            >
+              Pilot Support
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- 3. Key Benefits -->
+    <section
+      class="py-16 overflow-hidden bg-slate-50/50 reveal"
+      data-delay="2"
+      data-reveal="left"
+      id="features"
+    >
+      <div class="max-w-7xl mx-auto px-6 mb-12 text-center">
+        <h2
+          class="text-3xl md:text-4xl font-semibold tracking-tight text-slate-900 mb-4"
+        >
+          Why families choose Carenest.
+        </h2>
+        <p class="text-slate-500 max-w-xl mx-auto text-sm md:text-base">
+          Designed for trust. Verification is built into every step of the
+          process.
+        </p>
+      </div>
+      <!-- Feature 1 -->
+      <div class="max-w-7xl mx-auto px-6 mb-16">
+        <div class="flex flex-col md:flex-row items-center gap-10 lg:gap-20">
+          <div class="w-full md:w-1/2 order-2 md:order-1">
+            <div
+              class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-md bg-teal-50 text-teal-700 text-[10px] font-bold uppercase tracking-wider mb-4"
+            >
+              Safety First
+            </div>
+            <h3
+              class="text-5xl font-normal tracking-tight text-slate-900 mb-4"
+            >
+              Rigorously<br>Vetted</br>Professionals.
+            </h3>
+            <p class="text-slate-500 mb-6 leading-relaxed text-sm">
+              We verify every caregiver through a manual 4-step process
+              including identity checks (NIC), certificate verification (NVQ),
+              and background clearance.
+            </p>
+            <ul class="space-y-3 stagger">
+              <li
+                class="flex items-center gap-3 text-sm text-slate-700 font-medium"
               >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
+                  class="w-5 h-5 text-teal-600 stroke-[1.5]"
+                  data-lucide="shield-check"
+                ></svg>
+                Police Clearance Check
+              </li>
+              <li
+                class="flex items-center gap-3 text-sm text-slate-700 font-medium"
+              >
+                <svg
+                  class="w-5 h-5 text-teal-600 stroke-[1.5]"
+                  data-lucide="award"
+                ></svg>
+                NVQ Level 3/4 Verified
+              </li>
+              <li
+                class="flex items-center gap-3 text-sm text-slate-700 font-medium"
+              >
+                <svg
+                  class="w-5 h-5 text-teal-600 stroke-[1.5]"
+                  data-lucide="user-check"
+                ></svg>
+                In-person Interview
+              </li>
+            </ul>
+          </div>
+          <div class="w-full md:w-1/2 order-1 md:order-2">
+            <div
+              class="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200 aspect-[4/3] bg-white group"
+            >
+              <img
+                alt="Vetted Professional"
+                class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+                src="Images/1.jpeg"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Feature 2 -->
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row items-center gap-10 lg:gap-20">
+          <div class="w-full md:w-1/2">
+            <div
+              class="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200 aspect-[4/3] bg-white group"
+            >
+              <img
+                alt="Monitoring App"
+                class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+                src="Images/2.jpeg"
+              />
+              <!-- Floating UI Element -->
+              <div
+                class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur p-4 rounded-xl border border-slate-100 shadow-lg"
+              >
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-8 h-8 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center"
+                    >
+                      <svg class="w-4 h-4" data-lucide="activity"></svg>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold text-slate-900">
+                        Health Update
+                      </p>
+                      <p class="text-[10px] text-slate-500">
+                        BP: 120/80 • 10 mins ago
+                      </p>
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-medium text-slate-400"
+                    >Live</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full md:w-1/2">
+            <div
+              class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-md bg-teal-50 text-teal-700 text-[10px] font-bold uppercase tracking-wider mb-4"
+            >
+              Transparency
+            </div>
+            <h3
+              class="text-5xl font-normal tracking-tight text-slate-900 mb-4"
+            >
+              Real-time</br>Peace of Mind.
+            </h3>
+            <p class="text-slate-500 mb-6 leading-relaxed text-sm">
+              Track arrival times via GPS, receive photo updates of meals and
+              medication, and chat directly with caregivers through the app.
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+              <div
+                class="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-colors"
+              >
+                <!--first small card-->
+                <svg
+                  class="w-6 h-6 text-slate-900 stroke-[1.5] mb-2"
+                  data-lucide="map-pin"
+                ></svg>
+                <h4 class="font-semibold text-sm text-slate-900">
+                  GPS Check-ins
+                </h4>
+                <p class="text-xs text-slate-500 mt-1">
+                  Verify attendance instantly.
+                </p>
+              </div>
+              <!--second small card-->
+              <div
+                class="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-colors"
+              >
+                <svg
+                  class="w-6 h-6 text-slate-900 stroke-[1.5] mb-2"
+                  data-lucide="file-text"
+                ></svg>
+                <h4 class="font-semibold text-sm text-slate-900">Daily Logs</h4>
+                <p class="text-xs text-slate-500 mt-1">
+                  Vitals, mood, and meals.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- 4. Interactive How It Works (Timeline) -->
+    <section
+      class="py-16 bg-white border-y border-slate-100 reveal"
+      data-delay="3"
+      data-reveal="right"
+      id="process"
+    >
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+          <!-- Intro -->
+          <div class="lg:sticky lg:top-32 lg:self-start">
+            <h2
+              class="text-3xl md:text-4xl font-semibold tracking-tight text-slate-900 mb-4"
+            >
+              Simple, transparent care.
+            </h2>
+            <p class="text-slate-500 text-sm md:text-base mb-8">
+              We've simplified the process of finding qualified care down to
+              three essential steps. No hidden agency fees, just direct
+              connection.
+            </p>
+            <a
+              class="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 border-b border-slate-900 pb-0.5 hover:text-teal-600 hover:border-teal-600 transition-all"
+              href="#waitlist"
+            >
+              Start your booking request
+              <svg class="w-4 h-4" data-lucide="arrow-right"></svg>
+            </a>
+          </div>
+          <!-- Vertical Timeline -->
+          <div class="relative pl-8 md:pl-12 py-4" id="timeline-container">
+            <!-- The Line -->
+            <div
+              class="absolute left-3 md:left-4 top-4 bottom-4 w-0.5 bg-slate-100 rounded-full"
+            >
+              <div
+                class="w-full bg-teal-500 rounded-full timeline-line-fill"
+                id="timeline-line"
+              ></div>
+            </div>
+            <!-- Steps -->
+            <div class="space-y-12 stagger">
+              <!-- Step 1 -->
+              <div class="relative timeline-step" data-index="1">
+                <div
+                  class="absolute -left-[34px] md:-left-[39px] w-4 h-4 rounded-full border-[3px] border-white bg-slate-200 shadow-sm z-10 transition-colors duration-500 step-dot"
+                ></div>
+                <div class="group cursor-default">
+                  <span
+                    class="text-xs font-bold text-teal-600 uppercase tracking-wider mb-1 block"
+                    >Step 01</span
+                  >
+                  <h3
+                    class="text-xl font-semibold text-slate-900 mb-2 group-hover:text-teal-700 transition-colors"
+                  >
+                    Search &amp; Filter Caregivers
+                  </h3>
+                  <p class="text-sm text-slate-500 leading-relaxed">
+                    Filter by location (Kandy/Galle), specific needs (e.g.,
+                    Alzheimer's, Post-Op), and language. Our algorithm matches
+                    you with available pros nearby.
+                  </p>
+                </div>
+              </div>
+              <!-- Step 2 -->
+              <div class="relative timeline-step" data-index="2">
+                <div
+                  class="absolute -left-[34px] md:-left-[39px] w-4 h-4 rounded-full border-[3px] border-white bg-slate-200 shadow-sm z-10 transition-colors duration-500 delay-100 step-dot"
+                ></div>
+                <div class="group cursor-default">
+                  <span
+                    class="text-xs font-bold text-teal-600 uppercase tracking-wider mb-1 block"
+                    >Step 02</span
+                  >
+                  <h3
+                    class="text-xl font-semibold text-slate-900 mb-2 group-hover:text-teal-700 transition-colors"
+                  >
+                    Confirm Schedule &amp; Pricing
+                  </h3>
+                  <p class="text-sm text-slate-500 leading-relaxed">
+                    View clear hourly rates before you book. Chat instantly or
+                    schedule a quick video interview. Once you're comfortable,
+                    secure the booking.
+                  </p>
+                </div>
+              </div>
+              <!-- Step 3 -->
+              <div class="relative timeline-step" data-index="3">
+                <div
+                  class="absolute -left-[34px] md:-left-[39px] w-4 h-4 rounded-full border-[3px] border-white bg-slate-200 shadow-sm z-10 transition-colors duration-500 delay-200 step-dot"
+                ></div>
+                <div class="group cursor-default">
+                  <span
+                    class="text-xs font-bold text-teal-600 uppercase tracking-wider mb-1 block"
+                    >Step 03</span
+                  >
+                  <h3
+                    class="text-xl font-semibold text-slate-900 mb-2 group-hover:text-teal-700 transition-colors"
+                  >
+                    Care Delivered + Check-ins
+                  </h3>
+                  <p class="text-sm text-slate-500 leading-relaxed">
+                    Receive real-time updates when your caregiver arrives.
+                    Monitor daily logs and release payment only after the
+                    service is complete.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- 5. Trust & Safety -->
+    <section
+      class="py-16 md:py-24 overflow-hidden relative bg-slate-900 text-white reveal"
+      data-delay="4"
+      id="safety"
+    >
+      <div class="absolute inset-0 dot-grid opacity-10"></div>
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="flex flex-col lg:flex-row gap-16">
+          <div class="w-full lg:w-1/3">
+            <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-6">
+              Built on Trust.
+            </h2>
+            <p class="text-lg leading-relaxed mb-8 text-slate-400">
+              We understand that inviting someone into your home requires
+              immense trust. That's why safety isn't a feature—it's our
+              foundation.
+            </p>
+            <div
+              class="inline-flex items-center gap-2 text-xs font-mono border px-3 py-1.5 rounded-md text-teal-400 border-teal-900/50 bg-teal-950/30"
+            >
+              <span>MVP</span>
+            </div>
+          </div>
+          <div
+            class="w-full lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10 stagger"
+          >
+            <div class="flex gap-4">
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border bg-slate-800 border-slate-700"
+              >
+                <svg
+                  class="lucide lucide-badge-check w-5 h-5 stroke-[1.5] text-teal-400"
+                  data-lucide="badge-check"
                   fill="none"
+                  height="24"
                   stroke="currentColor"
-                  stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  data-lucide="play-circle"
-                  class="lucide lucide-play-circle w-4 h-4 stroke-[1.5]"
+                  stroke-width="2"
+                  viewbox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"
+                    d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
                   ></path>
-                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="m9 12 2 2 4-4"></path>
                 </svg>
-                See Process
-              </button>
-            </div>
-
-            <div
-              class="flex items-center gap-4 text-xs font-medium text-slate-500"
-            >
-              <div class="flex -space-x-3">
-                <img
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                  class="w-9 h-9 rounded-full border-[3px] border-white bg-slate-100"
-                />
-                <img
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneesa"
-                  class="w-9 h-9 rounded-full border-[3px] border-white bg-slate-100"
-                />
-                <img
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mark"
-                  class="w-9 h-9 rounded-full border-[3px] border-white bg-slate-100"
-                />
               </div>
-              <p>Trusted by 2,000+ families</p>
+              <div>
+                <h3 class="font-semibold mb-2 text-white">
+                  Verified Identities
+                </h3>
+                <p class="text-sm leading-relaxed text-slate-400">
+                  Government ID verification and comprehensive background checks
+                  for every caregiver.
+                </p>
+              </div>
             </div>
-          </div>
-
-          <!-- Right: Phone Mockup with Dot Animation -->
-          <div
-            class="w-full lg:w-1/2 flex justify-center lg:justify-end relative"
-          >
-            <!-- Animated Dot Grid Background -->
-            <div
-              class="absolute inset-0 w-full h-full dot-grid-anim -z-10 scale-125 lg:scale-110 translate-x-10 translate-y-10"
-            ></div>
-
-            <!-- Phone Frame -->
-            <div
-              class="relative w-[300px] h-[600px] rounded-[3rem] p-3 shadow-2xl rotate-[-2deg] hover:rotate-0 transition-transform duration-700 ease-out border-4 ring-1 bg-slate-900 border-slate-800 ring-white/10"
-            >
-              <!-- Screen Content -->
+            <div class="flex gap-4">
               <div
-                class="w-full h-full rounded-[2.5rem] overflow-hidden relative flex flex-col bg-slate-50"
+                class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border bg-slate-800 border-slate-700"
               >
-                <!-- Status Bar -->
-                <div
-                  class="h-10 w-full flex items-center justify-between px-6 pt-3 z-20"
+                <svg
+                  class="lucide lucide-dollar-sign w-5 h-5 stroke-[1.5] text-teal-400"
+                  data-lucide="dollar-sign"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewbox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <span class="text-[10px] font-semibold text-slate-900"
-                    >9:41</span
-                  >
-                  <div class="flex gap-1">
-                    <div class="w-4 h-1.5 rounded-full bg-slate-900/20"></div>
-                    <div class="w-4 h-1.5 rounded-full bg-slate-900"></div>
-                  </div>
-                </div>
-
-                <!-- App Content -->
-                <div class="flex-1 relative">
-                  <!-- Map Mock background -->
-                  <div class="absolute inset-0 bg-slate-200">
-                    <!-- Abstract Map Shapes -->
-                    <div
-                      class="bg-teal-100/50 w-48 h-48 rounded-full absolute top-0 right-0 blur-2xl"
-                    ></div>
-                    <div
-                      class="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-2xl bg-blue-100/50"
-                    ></div>
-
-                    <!-- Pins -->
-                    <div
-                      class="absolute top-1/3 left-1/2 -translate-x-1/2 transform"
-                    >
-                      <div
-                        class="text-[10px] font-bold px-2 py-1 rounded-lg shadow-lg mb-1 whitespace-nowrap bg-slate-900 text-white"
-                      >
-                        Nimali is nearby
-                      </div>
-                      <div
-                        class="w-8 h-8 bg-teal-500 rounded-full border-4 shadow-xl mx-auto flex items-center justify-center border-white"
-                      >
-                        <img
-                          src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mila"
-                          class="w-5 h-5 rounded-full"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Floating Card -->
-                  <div
-                    class="absolute bottom-6 left-4 right-4 backdrop-blur-xl p-4 rounded-2xl shadow-lg border bg-white/90 border-white/50"
-                  >
-                    <div class="flex items-center gap-3 mb-3">
-                      <div
-                        class="w-10 h-10 rounded-full flex items-center justify-center bg-teal-50 text-teal-600"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          data-lucide="check"
-                          class="lucide lucide-check w-5 h-5 stroke-[2]"
-                        >
-                          <path d="M20 6 9 17l-5-5"></path>
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 class="text-xs font-bold text-slate-900">
-                          Booking Confirmed
-                        </h3>
-                        <p class="text-[10px] text-slate-500">
-                          Today, 2:00 PM - 6:00 PM
-                        </p>
-                      </div>
-                    </div>
-                    <div class="flex gap-2">
-                      <button
-                        class="flex-1 py-2 text-[10px] font-semibold rounded-lg bg-slate-900 text-white"
-                      >
-                        View Details
-                      </button>
-                      <button
-                        class="w-8 flex items-center justify-center border rounded-lg border-slate-200"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          data-lucide="phone"
-                          class="lucide lucide-phone w-3 h-3 text-slate-600"
-                        >
-                          <path
-                            d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"
-                          ></path>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                  <line x1="12" x2="12" y1="2" y2="22"></line>
+                  <path
+                    d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-2 text-white">
+                  Transparent Pricing
+                </h3>
+                <p class="text-sm leading-relaxed text-slate-400">
+                  Know exactly what you pay. No hidden agency fees or surprise
+                  charges.
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border bg-slate-800 border-slate-700"
+              >
+                <svg
+                  class="lucide lucide-map w-5 h-5 stroke-[1.5] text-teal-400"
+                  data-lucide="map"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewbox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"
+                  ></path>
+                  <path d="M15 5.764v15"></path>
+                  <path d="M9 3.236v15"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-2 text-white">GPS Tracking</h3>
+                <p class="text-sm leading-relaxed text-slate-400">
+                  Automated check-ins and check-outs ensure you only pay for
+                  hours worked.
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div
+                class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border bg-slate-800 border-slate-700"
+              >
+                <svg
+                  class="lucide lucide-headphones w-5 h-5 stroke-[1.5] text-teal-400"
+                  data-lucide="headphones"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewbox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold mb-2 text-white">24/7 Support</h3>
+                <p class="text-sm leading-relaxed text-slate-400">
+                  Our dedicated support team is available around the clock for
+                  any emergencies.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- 2. Dynamic Stats Bar -->
-    <section id="stats" class="border-y py-16 bg-slate-900 border-slate-800">
-      <div class="max-w-7xl mx-auto px-6">
-        <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x text-center divide-slate-800/50"
+    <!-- 6. Compact FAQ -->
+    <section
+      class="py-16 md:py-24 bg-white reveal"
+      data-delay="4"
+      data-reveal="left"
+      id="faq"
+    >
+      <div class="max-w-3xl mx-auto px-6">
+        <h2
+          class="text-3xl font-semibold tracking-tight mb-10 text-center text-slate-900"
         >
-          <!-- Stat 1 -->
-          <div class="p-2">
-            <div
-              class="text-4xl md:text-5xl font-semibold tracking-tight mb-2 flex justify-center items-baseline text-white"
+          Frequently asked questions.
+        </h2>
+        <div class="space-y-4 stagger">
+          <details class="group border-b pb-4 border-slate-200">
+            <summary
+              class="flex items-center justify-between cursor-pointer font-medium group-hover:text-teal-700 transition-colors text-slate-900"
             >
-              <span class="counter" data-target="500">0</span>
-              <span class="text-teal-500 ml-1">+</span>
+              How are caregivers verified?
+              <svg
+                class="lucide lucide-chevron-down w-5 h-5 transition-transform group-open:rotate-180 text-slate-400"
+                data-lucide="chevron-down"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p class="mt-3 text-sm text-slate-500 leading-relaxed">
+                We conduct a strict 4-step process: NIC identity verification,
+                Grama Niladhari clearance, checking of nursing/caregiver
+                certificates (NVQ), and an in-person behavioral interview.
+              </p>
             </div>
-            <p
-              class="text-xs font-medium uppercase tracking-widest text-slate-400"
+          </details>
+          <details class="group border-b pb-4 border-slate-200">
+            <summary
+              class="flex items-center justify-between cursor-pointer font-medium group-hover:text-teal-700 transition-colors text-slate-900"
             >
-              Verified Caregivers
-            </p>
-          </div>
-          <!-- Stat 2 -->
-          <div class="p-2">
-            <div
-              class="text-4xl md:text-5xl font-semibold tracking-tight mb-2 flex justify-center items-baseline text-white"
-            >
-              <span class="counter" data-target="12">0</span>
-              <span class="text-teal-500 ml-1">k+</span>
+              Which areas do you cover?
+              <svg
+                class="lucide lucide-chevron-down w-5 h-5 transition-transform group-open:rotate-180 text-slate-400"
+                data-lucide="chevron-down"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p class="mt-3 text-sm text-slate-500 leading-relaxed">
+                The platform is designed to launch initially in the Colombo and
+                Gampaha districts, with plans to expand island-wide.
+              </p>
             </div>
-            <p
-              class="text-xs font-medium uppercase tracking-widest text-slate-400"
+          </details>
+          <details class="group border-b pb-4 border-slate-200">
+            <summary
+              class="flex items-center justify-between cursor-pointer font-medium group-hover:text-teal-700 transition-colors text-slate-900"
             >
-              Hours of Care
-            </p>
-          </div>
-          <!-- Stat 3 -->
-          <div class="p-2">
-            <div
-              class="text-4xl md:text-5xl font-semibold tracking-tight mb-2 flex justify-center items-baseline text-white"
-            >
-              <span class="counter" data-target="98">0</span>
-              <span class="text-teal-500 ml-1">%</span>
+              Can I book hospital care and home visits?
+              <svg
+                class="lucide lucide-chevron-down w-5 h-5 transition-transform group-open:rotate-180 text-slate-400"
+                data-lucide="chevron-down"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p class="mt-3 text-sm text-slate-500 leading-relaxed">
+                Yes. Our caregivers are available for in-home care, hospital
+                bystanders, and post-operative support at medical facilities.
+              </p>
             </div>
-            <p
-              class="text-xs font-medium uppercase tracking-widest text-slate-400"
+          </details>
+          <details class="group border-b pb-4 border-slate-200">
+            <summary
+              class="flex items-center justify-between cursor-pointer font-medium group-hover:text-teal-700 transition-colors text-slate-900"
             >
-              Client Satisfaction
-            </p>
-          </div>
-          <!-- Stat 4 -->
-          <div class="p-2">
-            <div
-              class="text-4xl md:text-5xl font-semibold tracking-tight mb-2 flex justify-center items-baseline text-white"
-            >
-              <span class="counter" data-target="24">0</span>
-              <span class="text-teal-500 ml-1">/7</span>
+              What if I need urgent help?
+              <svg
+                class="lucide lucide-chevron-down w-5 h-5 transition-transform group-open:rotate-180 text-slate-400"
+                data-lucide="chevron-down"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p class="mt-3 text-sm text-slate-500 leading-relaxed">
+                Carenest is designed for planned care bookings (at least 2 hours
+                notice recommended). For medical emergencies, please always
+                contact 1990 or local emergency services immediately.
+              </p>
             </div>
-            <p
-              class="text-xs font-medium uppercase tracking-widest text-slate-400"
+          </details>
+          <details class="group border-b pb-4 border-slate-200">
+            <summary
+              class="flex items-center justify-between cursor-pointer font-medium group-hover:text-teal-700 transition-colors text-slate-900"
             >
-              Support Team
-            </p>
-          </div>
+              How do payments work?
+              <svg
+                class="lucide lucide-chevron-down w-5 h-5 transition-transform group-open:rotate-180 text-slate-400"
+                data-lucide="chevron-down"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+            <div class="faq-answer">
+              <p class="mt-3 text-sm text-slate-500 leading-relaxed">
+                Payments are handled securely through the app via credit/debit
+                card or bank transfer. Funds are held in escrow and released to
+                the caregiver only after the shift is completed satisfactorily.
+              </p>
+            </div>
+          </details>
         </div>
       </div>
     </section>
-
-    <!-- 6. New Section: How It Works (Step Process) -->
-    <section id="how-it-works" class="py-24 bg-white">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl font-semibold tracking-tight mb-4 text-slate-900">
-            Simple, transparent care.
-          </h2>
-          <p class="text-slate-500 max-w-xl mx-auto">
-            Get the help you need in three simple steps.
+    <!-- 7. Waitlist -->
+    <section
+      class="py-20 md:py-32 border-t bg-slate-50 border-slate-200 reveal"
+      data-delay="4"
+      id="waitlist"
+    >
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <div
+          class="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-full text-xs font-semibold bg-slate-200/50 text-slate-600"
+        >
+          <span class="w-2 h-2 rounded-full bg-teal-500"></span> Opening spots
+          for Colombo
+        </div>
+        <h2
+          class="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-slate-900"
+        >
+          Get early access.
+        </h2>
+        <p class="text-lg text-slate-500 mb-10 max-w-xl mx-auto">
+          Join the Carenest waitlist to receive launch updates, pilot openings,
+          and caregiver coverage expansions.
+        </p>
+        <!-- Email Form -->
+        <div class="max-w-md mx-auto mb-12">
+          <form
+            class="flex gap-2"
+            onsubmit="event.preventDefault(); alert('Thanks! You are on the list.');"
+          >
+            <input
+              class="flex-1 h-12 px-4 rounded-lg border focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all placeholder:text-slate-400 border-slate-300 bg-white text-slate-900"
+              placeholder="Enter your email"
+              required=""
+              type="email"
+            />
+            <button
+              class="h-12 px-6 rounded-lg font-semibold transition-colors shadow-lg bg-slate-900 text-white hover:bg-slate-800 shadow-slate-200"
+              type="submit"
+            >
+              Notify me
+            </button>
+          </form>
+          <p class="text-xs mt-3 text-slate-400">
+            No spam. Unsubscribe anytime.
           </p>
         </div>
-
-        <div class="relative">
-          <!-- Connecting Line -->
-          <div
-            class="absolute top-1/2 left-0 w-full h-0.5 -translate-y-1/2 hidden md:block z-0 bg-slate-100"
-          ></div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10">
-            <!-- Step 1 -->
-            <div
-              class="p-6 rounded-2xl border shadow-sm text-center md:text-left group transition-colors bg-white border-slate-100 hover:border-teal-200"
-            >
-              <div
-                class="w-12 h-12 border rounded-xl flex items-center justify-center font-bold text-lg mb-6 shadow-sm mx-auto md:mx-0 group-hover:scale-110 transition-transform bg-white border-slate-200 text-slate-900"
-              >
-                1
-              </div>
-              <h3 class="text-lg font-semibold mb-2 text-slate-900">
-                Search &amp; Match
-              </h3>
-              <p class="text-sm text-slate-500 leading-relaxed">
-                Filter by location, skills (e.g., Alzheimer's, Post-Op), and
-                language. Our algorithm finds the best fit instantly.
-              </p>
-            </div>
-
-            <!-- Step 2 -->
-            <div
-              class="p-6 rounded-2xl border shadow-sm text-center md:text-left group transition-colors bg-white border-slate-100 hover:border-teal-200"
-            >
-              <div
-                class="w-12 h-12 border rounded-xl flex items-center justify-center font-bold text-lg mb-6 shadow-sm mx-auto md:mx-0 group-hover:scale-110 transition-transform bg-white border-slate-200 text-slate-900"
-              >
-                2
-              </div>
-              <h3 class="text-lg font-semibold mb-2 text-slate-900">
-                Interview &amp; Book
-              </h3>
-              <p class="text-sm text-slate-500 leading-relaxed">
-                Chat via the app or schedule a video interview. Once satisfied,
-                book securely with transparent pricing.
-              </p>
-            </div>
-
-            <!-- Step 3 -->
-            <div
-              class="p-6 rounded-2xl border shadow-sm text-center md:text-left group transition-colors bg-white border-slate-100 hover:border-teal-200"
-            >
-              <div
-                class="w-12 h-12 border rounded-xl flex items-center justify-center font-bold text-lg mb-6 shadow-sm mx-auto md:mx-0 group-hover:scale-110 transition-transform bg-teal-600 border-teal-600 text-white"
-              >
-                3
-              </div>
-              <h3 class="text-lg font-semibold mb-2 text-slate-900">
-                Manage Care
-              </h3>
-              <p class="text-sm text-slate-500 leading-relaxed">
-                Receive real-time updates, GPS check-ins, and daily health logs
-                directly to your phone.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. "Our Services" Flippable Cards -->
-    <section id="services" class="py-24 bg-slate-50">
-      <div class="max-w-7xl mx-auto px-6">
+        <!-- Mini Trust Tiles -->
         <div
-          class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6"
+          class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto stagger"
         >
-          <div>
-            <h2
-              class="text-3xl font-semibold tracking-tight mb-3 text-slate-900"
-            >
-              Tailored services.
-            </h2>
-            <p class="text-slate-500">
-              Specialized care for every stage of life.
-            </p>
-          </div>
-          <a
-            href="#"
-            class="text-sm font-medium flex items-center gap-1 text-teal-600 hover:text-teal-700"
+          <div
+            class="p-4 rounded-xl border shadow-sm flex flex-col items-center bg-white border-slate-100"
           >
-            View full catalog
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+              class="lucide lucide-shield w-6 h-6 mb-2 stroke-[1.5] text-slate-900"
+              data-lucide="shield"
               fill="none"
+              height="24"
               stroke="currentColor"
-              stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              data-lucide="arrow-right"
-              class="lucide lucide-arrow-right w-4 h-4 stroke-[1.5]"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M5 12h14"></path>
-              <path d="m12 5 7 7-7 7"></path>
+              <path
+                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+              ></path>
             </svg>
-          </a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 h-80">
-          <!-- Card 1: Elderly Care -->
-          <div class="group perspective-1000 w-full h-full cursor-pointer">
-            <div
-              class="flip-card-inner relative w-full h-full duration-500 preserve-3d"
+            <span class="text-sm font-semibold text-slate-900"
+              >4-Step Vetting</span
             >
-              <!-- Front -->
-              <div
-                class="absolute inset-0 w-full h-full backface-hidden rounded-2xl overflow-hidden shadow-sm"
-              >
-                <img
-                  src="/Images/elderlyCare.png"
-                  class="w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t to-transparent from-slate-900/90"
-                ></div>
-                <div class="absolute bottom-6 left-6">
-                  <h3 class="font-semibold text-lg text-white">Elderly Care</h3>
-                </div>
-              </div>
-              <!-- Back -->
-              <div
-                class="absolute inset-0 w-full h-full backface-hidden rounded-2xl border p-6 rotate-y-180 flex flex-col justify-center items-center text-center shadow-lg bg-white border-slate-200"
-              >
-                <div
-                  class="w-10 h-10 rounded-full flex items-center justify-center mb-4 bg-teal-50 text-teal-600"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    data-lucide="heart"
-                    class="lucide lucide-heart w-5 h-5 stroke-[1.5]"
-                  >
-                    <path
-                      d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"
-                    ></path>
-                  </svg>
-                </div>
-                <h3 class="font-semibold mb-2 text-slate-900">Elderly Care</h3>
-                <p class="text-xs text-slate-500 mb-4 leading-relaxed">
-                  Compassionate support for daily living, medication management,
-                  and companionship.
-                </p>
-                <span
-                  class="text-xs font-semibold hover:underline text-teal-600"
-                  >Learn more</span
-                >
-              </div>
-            </div>
           </div>
-
-          <!-- Card 2: Post-Op -->
-          <div class="group perspective-1000 w-full h-full cursor-pointer">
-            <div
-              class="flip-card-inner relative w-full h-full duration-500 preserve-3d"
+          <div
+            class="p-4 rounded-xl border shadow-sm flex flex-col items-center bg-white border-slate-100"
+          >
+            <svg
+              class="lucide lucide-map-pin w-6 h-6 mb-2 stroke-[1.5] text-slate-900"
+              data-lucide="map-pin"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <!-- Front -->
-              <div
-                class="absolute inset-0 w-full h-full backface-hidden rounded-2xl overflow-hidden shadow-sm"
-              >
-                <img
-                  src="Images/postop.png"
-                  class="w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t to-transparent from-slate-900/90"
-                ></div>
-                <div class="absolute bottom-6 left-6">
-                  <h3 class="font-semibold text-lg text-white">
-                    Post-Operative
-                  </h3>
-                </div>
-              </div>
-              <!-- Back -->
-              <div
-                class="absolute inset-0 w-full h-full backface-hidden rounded-2xl border p-6 rotate-y-180 flex flex-col justify-center items-center text-center shadow-lg bg-white border-slate-200"
-              >
-                <div
-                  class="w-10 h-10 rounded-full flex items-center justify-center mb-4 bg-teal-50 text-teal-600"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    data-lucide="activity"
-                    class="lucide lucide-activity w-5 h-5 stroke-[1.5]"
-                  >
-                    <path
-                      d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
-                    ></path>
-                  </svg>
-                </div>
-                <h3 class="font-semibold mb-2 text-slate-900">
-                  Post-Operative
-                </h3>
-                <p class="text-xs text-slate-500 mb-4 leading-relaxed">
-                  Professional nursing care for wound dressing, vital checks,
-                  and recovery support.
-                </p>
-                <span
-                  class="text-xs font-semibold hover:underline text-teal-600"
-                  >Learn more</span
-                >
-              </div>
-            </div>
+              <path
+                d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+              ></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span class="text-sm font-semibold text-slate-900"
+              >GPS Check-ins</span
+            >
           </div>
-
-          <!-- Card 3: Child Care -->
-          <div class="group perspective-1000 w-full h-full cursor-pointer">
-            <div
-              class="flip-card-inner relative w-full h-full duration-500 preserve-3d"
+          <div
+            class="p-4 rounded-xl border shadow-sm flex flex-col items-center bg-white border-slate-100"
+          >
+            <svg
+              class="lucide lucide-clock w-6 h-6 mb-2 stroke-[1.5] text-slate-900"
+              data-lucide="clock"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewbox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <!-- Front -->
-              <div
-                class="absolute inset-0 w-full h-full backface-hidden rounded-2xl overflow-hidden shadow-sm"
-              >
-                <img
-                  src="/Images/childCare.png"
-                  class="w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t to-transparent from-slate-900/90"
-                ></div>
-                <div class="absolute bottom-6 left-6">
-                  <h3 class="font-semibold text-lg text-white">Child Care</h3>
-                </div>
-              </div>
-              <!-- Back -->
-              <div
-                class="absolute inset-0 w-full h-full backface-hidden rounded-2xl border p-6 rotate-y-180 flex flex-col justify-center items-center text-center shadow-lg bg-white border-slate-200"
-              >
-                <div
-                  class="w-10 h-10 rounded-full flex items-center justify-center mb-4 bg-teal-50 text-teal-600"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    data-lucide="baby"
-                    class="lucide lucide-baby w-5 h-5 stroke-[1.5]"
-                  >
-                    <path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"></path>
-                    <path d="M15 12h.01"></path>
-                    <path
-                      d="M19.38 6.813A9 9 0 0 1 20.8 10.2a2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"
-                    ></path>
-                    <path d="M9 12h.01"></path>
-                  </svg>
-                </div>
-                <h3 class="font-semibold mb-2 text-slate-900">Child Care</h3>
-                <p class="text-xs text-slate-500 mb-4 leading-relaxed">
-                  Trusted nannies and babysitters verified for safety and
-                  childcare experience.
-                </p>
-                <span
-                  class="text-xs font-semibold hover:underline text-teal-600"
-                  >Learn more</span
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 4: Physiotherapy -->
-          <div class="group perspective-1000 w-full h-full cursor-pointer">
-            <div
-              class="flip-card-inner relative w-full h-full duration-500 preserve-3d"
+              <path d="M12 6v6l4 2"></path>
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+            <span class="text-sm font-semibold text-slate-900"
+              >24/7 Support</span
             >
-              <!-- Front -->
-              <div
-                class="absolute inset-0 w-full h-full backface-hidden rounded-2xl overflow-hidden shadow-sm"
-              >
-                <img
-                  src="/Images/physiotherapy.png"
-                  class="w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t to-transparent from-slate-900/90"
-                ></div>
-                <div class="absolute bottom-6 left-6">
-                  <h3 class="font-semibold text-lg text-white">
-                    Physiotherapy
-                  </h3>
-                </div>
-              </div>
-              <!-- Back -->
-              <div
-                class="absolute inset-0 w-full h-full backface-hidden rounded-2xl border p-6 rotate-y-180 flex flex-col justify-center items-center text-center shadow-lg bg-white border-slate-200"
-              >
-                <div
-                  class="w-10 h-10 rounded-full flex items-center justify-center mb-4 bg-teal-50 text-teal-600"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    data-lucide="accessibility"
-                    class="lucide lucide-accessibility w-5 h-5 stroke-[1.5]"
-                  >
-                    <circle cx="16" cy="4" r="1"></circle>
-                    <path d="m18 19 1-7-6 1"></path>
-                    <path d="m5 8 3-3 5.5 3-2.36 3.5"></path>
-                    <path d="M4.24 14.5a5 5 0 0 0 6.88 6"></path>
-                    <path d="M13.76 17.5a5 5 0 0 0-6.88-6"></path>
-                  </svg>
-                </div>
-                <h3 class="font-semibold mb-2 text-slate-900">Physiotherapy</h3>
-                <p class="text-xs text-slate-500 mb-4 leading-relaxed">
-                  In-home rehabilitation sessions by certified physiotherapists.
-                </p>
-                <span
-                  class="text-xs font-semibold hover:underline text-teal-600"
-                  >Learn more</span
-                >
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- 4. Expanded Feature Sections (Zig-Zag) -->
-    <section id="features" class="overflow-hidden">
-      <!-- Feature A -->
-      <div class="py-24 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-6">
-          <div class="flex flex-col md:flex-row items-center gap-16">
-            <div class="w-full md:w-1/2 order-2 md:order-1">
-              <div class="relative">
-                <!-- Green Brush Stroke SVG behind header -->
-                <svg
-                  class="absolute -top-6 -left-6 w-32 h-32 -z-10 text-teal-100/50"
-                  viewBox="0 0 200 200"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M44.7,-76.4C58.9,-69.2,71.8,-59.1,81.6,-46.6C91.4,-34.1,98.1,-19.2,95.8,-4.9C93.5,9.4,82.2,23.1,70.9,34.5C59.6,45.9,48.3,55,36.4,63.5C24.5,72,12,79.9,-1.2,81.9C-14.4,83.9,-29.9,80,-43.3,72.4C-56.7,64.8,-68.1,53.5,-75.6,40.2C-83.1,26.9,-86.7,11.6,-84.3,-2.8C-81.9,-17.2,-73.5,-30.7,-63.1,-41.8C-52.7,-52.9,-40.3,-61.6,-27.1,-69.4C-13.9,-77.2,-0,-84.1,14.5,-82.4C29,-80.7,58,-70.4,44.7,-76.4Z"
-                    transform="translate(100 100)"
-                  ></path>
-                </svg>
-                <h2
-                  class="text-3xl font-semibold tracking-tight mb-6 text-slate-900"
-                >
-                  Vetted Professionals.
-                </h2>
-              </div>
-              <p class="text-lg text-slate-500 mb-8 leading-relaxed">
-                Safety is our obsession. Every caregiver undergoes a rigorous
-                4-step vetting process including criminal background checks,
-                identity verification, and medical board interviews.
-              </p>
-              <ul class="space-y-4">
-                <li class="flex items-center gap-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    data-lucide="shield-check"
-                    class="lucide lucide-shield-check w-5 h-5 stroke-[1.5] text-teal-600"
-                  >
-                    <path
-                      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
-                    ></path>
-                    <path d="m9 12 2 2 4-4"></path>
-                  </svg>
-                  <span class="text-sm text-slate-700"
-                    >Police Clearance Certificate</span
-                  >
-                </li>
-                <li class="flex items-center gap-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    data-lucide="file-check"
-                    class="lucide lucide-file-check w-5 h-5 stroke-[1.5] text-teal-600"
-                  >
-                    <path
-                      d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
-                    ></path>
-                    <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
-                    <path d="m9 15 2 2 4-4"></path>
-                  </svg>
-                  <span class="text-sm text-slate-700"
-                    >NVQ Level 3/4 Verification</span
-                  >
-                </li>
-                <li class="flex items-center gap-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    data-lucide="user-check"
-                    class="lucide lucide-user-check w-5 h-5 stroke-[1.5] text-teal-600"
-                  >
-                    <path d="m16 11 2 2 4-4"></path>
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                  </svg>
-                  <span class="text-sm text-slate-700"
-                    >In-person Behavioral Assessment</span
-                  >
-                </li>
-              </ul>
-            </div>
-            <div class="w-full md:w-1/2 order-1 md:order-2 flex justify-center">
-              <img
-                src="/Images/vettedProfessionals.png"
-                alt="Vetting"
-                class="w-full max-w-md"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Feature B -->
-      <div class="py-24 border-t border-slate-200 bg-slate-50/50">
-        <div class="max-w-7xl mx-auto px-6">
-          <div class="flex flex-col md:flex-row items-center gap-16">
-            <div class="w-full md:w-1/2 flex justify-center">
-              <img
-                src="/Images/RealtimeMonitoring.png"
-                alt="Monitoring"
-                class="w-full max-w-md"
-              />
-            </div>
-            <div class="w-full md:w-1/2">
-              <div class="relative">
-                <svg
-                  class="absolute -top-8 -left-8 w-32 h-32 -z-10 text-teal-100/50"
-                  viewBox="0 0 200 200"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M38.1,-49.9C49.9,-44.1,60.2,-34.5,65.8,-22.8C71.4,-11,72.3,2.9,67.6,15.1C62.9,27.3,52.6,37.8,41.4,45.8C30.2,53.8,18.1,59.3,5.1,60.9C-7.9,62.5,-21.8,60.2,-34.4,53.3C-47,46.4,-58.3,34.9,-63.9,21.3C-69.5,7.7,-69.4,-8,-62.4,-20.9C-55.4,-33.8,-41.5,-43.9,-28.1,-48.8C-14.7,-53.7,-1.8,-53.4,10.6,-50.2C23,-47,36,-43.8,38.1,-49.9Z"
-                    transform="translate(100 100)"
-                  ></path>
-                </svg>
-                <h2
-                  class="text-3xl font-semibold tracking-tight mb-6 text-slate-900"
-                >
-                  Real-time Monitoring.
-                </h2>
-              </div>
-              <p class="text-lg text-slate-500 mb-8 leading-relaxed">
-                Stay connected, no matter where you are. Our app provides a live
-                feed of care activities, vital signs logs, and direct messaging
-                with your caregiver.
-              </p>
-              <div class="grid grid-cols-2 gap-4">
-                <div
-                  class="p-4 border rounded-xl shadow-sm bg-white border-slate-200"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    data-lucide="map-pin"
-                    class="lucide lucide-map-pin w-6 h-6 mb-3 stroke-[1.5] text-teal-600"
-                  >
-                    <path
-                      d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
-                    ></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <h4 class="font-semibold text-sm text-slate-900">
-                    GPS Tracking
-                  </h4>
-                  <p class="text-xs text-slate-500 mt-1">
-                    Know when they arrive.
-                  </p>
-                </div>
-                <div
-                  class="p-4 border rounded-xl shadow-sm bg-white border-slate-200"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    data-lucide="activity"
-                    class="lucide lucide-activity w-6 h-6 mb-3 stroke-[1.5] text-teal-600"
-                  >
-                    <path
-                      d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
-                    ></path>
-                  </svg>
-                  <h4 class="font-semibold text-sm text-slate-900">
-                    Health Logs
-                  </h4>
-                  <p class="text-xs text-slate-500 mt-1">
-                    BP &amp; Sugar updates.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Feature C -->
-      <div class="py-24 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-6">
-          <div class="flex flex-col md:flex-row items-center gap-16">
-            <div class="w-full md:w-1/2 order-2 md:order-1">
-              <div class="relative">
-                <svg
-                  class="absolute -top-6 -left-6 w-32 h-32 -z-10 text-teal-100/50"
-                  viewBox="0 0 200 200"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M45.7,-76.3C58.9,-69.3,69.4,-57.6,76.6,-44.6C83.8,-31.6,87.7,-17.3,86.4,-3.6C85.1,10.1,78.6,23.2,69.5,34.8C60.4,46.4,48.7,56.5,35.9,64.3C23.1,72.1,9.2,77.6,-3.6,82.5C-16.4,87.4,-28.1,91.7,-38.7,86.8C-49.3,81.9,-58.8,67.8,-66.6,53.8C-74.4,39.8,-80.5,25.9,-81.9,11.5C-83.3,-2.9,-80,-17.8,-72.5,-30.5C-65,-43.2,-53.3,-53.7,-41,-60.9C-28.7,-68.1,-15.8,-72,-2.1,-69.1C11.6,-66.2,23.2,-56.5,32.5,-83.3Z"
-                    transform="translate(100 100)"
-                  ></path>
-                </svg>
-                <h2
-                  class="text-3xl font-semibold tracking-tight mb-6 text-slate-900"
-                >
-                  Flexible Scheduling.
-                </h2>
-              </div>
-              <p class="text-lg text-slate-500 mb-8 leading-relaxed">
-                Life is unpredictable. Your care shouldn't be rigid. Book for a
-                few hours, a few days, or long-term. No lock-in contracts, ever.
-              </p>
-              <button
-                class="font-semibold text-sm border-b-2 border-teal-500 pb-0.5 transition-colors text-slate-900 hover:text-teal-600"
-              >
-                Explore Pricing Models
-              </button>
-            </div>
-            <div class="w-full md:w-1/2 order-1 md:order-2 flex justify-center">
-              <img
-                src="/Images/Flexible scheduling.png"
-                alt="Scheduling"
-                class="w-full max-w-md"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. Testimonials (Infinite Marquee) -->
-    <section
-      id="reviews"
-      class="py-24 border-t overflow-hidden bg-slate-50 border-slate-200"
+    <!-- 8. Footer (Dark Theme) -->
+    <footer
+      class="bg-slate-950 text-slate-400 pt-16 pb-8 border-t border-slate-900"
     >
-      <div class="max-w-7xl mx-auto px-6 mb-16 text-center">
-        <h2 class="text-3xl font-semibold tracking-tight text-slate-900">
-          Loved by families.
-        </h2>
-      </div>
-
-      <div class="relative w-full">
-        <!-- Fade gradients -->
-        <div
-          class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r to-transparent z-10 pointer-events-none from-white"
-        ></div>
-        <div
-          class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l to-transparent z-10 pointer-events-none from-white"
-        ></div>
-
-        <div class="flex w-max animate-marquee gap-8">
-          <!-- Card 1 -->
-          <div
-            class="w-[350px] p-8 rounded-2xl border flex-shrink-0 bg-slate-50 border-slate-100"
-          >
-            <div class="flex gap-1 text-teal-500 mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-            </div>
-            <p class="text-sm mb-6 leading-relaxed text-slate-600">
-              "Carenest was a lifesaver when my mother needed post-op care. The
-              nurse was professional and kind."
-            </p>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-slate-500 bg-slate-200"
-              >
-                DF
-              </div>
-              <div>
-                <div class="text-sm font-semibold text-slate-900">
-                  Dimath F.
-                </div>
-                <div class="text-xs text-slate-500">Melbourne, AU</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 2 -->
-          <div
-            class="w-[350px] p-8 rounded-2xl border flex-shrink-0 bg-slate-50 border-slate-100"
-          >
-            <div class="flex gap-1 text-teal-500 mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-            </div>
-            <p class="text-sm mb-6 leading-relaxed text-slate-600">
-              "The transparency is amazing. I can see exactly when the caregiver
-              arrives and leaves."
-            </p>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-slate-500 bg-slate-200"
-              >
-                SJ
-              </div>
-              <div>
-                <div class="text-sm font-semibold text-slate-900">Sarah J.</div>
-                <div class="text-xs text-slate-500">Colombo 07</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 3 -->
-          <div
-            class="w-[350px] p-8 rounded-2xl border flex-shrink-0 bg-slate-50 border-slate-100"
-          >
-            <div class="flex gap-1 text-teal-500 mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-            </div>
-            <p class="text-sm mb-6 leading-relaxed text-slate-600">
-              "Found a reliable nanny for my kids within 24 hours. The vetting
-              process gives me peace of mind."
-            </p>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-slate-500 bg-slate-200"
-              >
-                MK
-              </div>
-              <div>
-                <div class="text-sm font-semibold text-slate-900">Malik K.</div>
-                <div class="text-xs text-slate-500">Kandy</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 4 -->
-          <div
-            class="w-[350px] p-8 rounded-2xl border flex-shrink-0 bg-slate-50 border-slate-100"
-          >
-            <div class="flex gap-1 text-teal-500 mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-            </div>
-            <p class="text-sm mb-6 leading-relaxed text-slate-600">
-              "Excellent customer service. They helped me customize a schedule
-              that worked for my budget."
-            </p>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-slate-500 bg-slate-200"
-              >
-                AF
-              </div>
-              <div>
-                <div class="text-sm font-semibold text-slate-900">Azeem F.</div>
-                <div class="text-xs text-slate-500">Dehiwala</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Duplicates for Infinite Scroll -->
-          <div
-            class="w-[350px] p-8 rounded-2xl border flex-shrink-0 bg-slate-50 border-slate-100"
-          >
-            <div class="flex gap-1 text-teal-500 mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-            </div>
-            <p class="text-sm mb-6 leading-relaxed text-slate-600">
-              "Carenest was a lifesaver when my mother needed post-op care. The
-              nurse was professional and kind."
-            </p>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-slate-500 bg-slate-200"
-              >
-                DP
-              </div>
-              <div>
-                <div class="text-sm font-semibold text-slate-900">
-                  Dilshan P.
-                </div>
-                <div class="text-xs text-slate-500">Melbourne, AU</div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="w-[350px] p-8 rounded-2xl border flex-shrink-0 bg-slate-50 border-slate-100"
-          >
-            <div class="flex gap-1 text-teal-500 mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-lucide="star"
-                class="lucide lucide-star w-4 h-4 fill-current stroke-none"
-              >
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                ></path>
-              </svg>
-            </div>
-            <p class="text-sm mb-6 leading-relaxed text-slate-600">
-              "The transparency is amazing. I can see exactly when the caregiver
-              arrives and leaves."
-            </p>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-slate-500 bg-slate-200"
-              >
-                SJ
-              </div>
-              <div>
-                <div class="text-sm font-semibold text-slate-900">Sarah J.</div>
-                <div class="text-xs text-slate-500">Colombo 07</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="border-t pt-16 pb-12 bg-slate-50 border-slate-200">
       <div class="max-w-7xl mx-auto px-6">
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
-          <div class="col-span-2 md:col-span-2 pr-8">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8 mb-12">
+          <!-- Brand Column -->
+          <div class="md:col-span-2">
             <div class="flex items-center gap-2 mb-6">
               <div
-                class="w-7 h-7 rounded-md flex items-center justify-center bg-teal-600 text-white"
+                class="w-6 h-6 rounded bg-slate-100 text-slate-950 flex items-center justify-center"
               >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  class="w-3.5 h-3.5 stroke-[1.5]"
                   data-lucide="heart-handshake"
-                  class="lucide lucide-heart-handshake w-4 h-4 stroke-[1.5]"
-                >
-                  <path
-                    d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"
-                  ></path>
-                </svg>
+                ></svg>
               </div>
-              <span class="font-bold tracking-tight text-lg text-slate-900"
-                >Carenest</span
+              <span class="font-bold tracking-tight text-base text-white"
+                >CARENEST</span
               >
             </div>
-            <p class="text-xs text-slate-500 mb-4 max-w-xs leading-relaxed">
-              Carenest Technologies (Pvt) Ltd.<br />
-              Connecting hearts, one home at a time.
+            <p class="text-sm text-slate-500 mb-6 leading-relaxed max-w-xs">
+              Caregiver booking platform for Sri Lanka. Connecting hearts, one
+              home at a time.
             </p>
-            <div class="flex gap-4">
-              <a
-                href="#"
-                class="transition-colors text-slate-400 hover:text-slate-900"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  data-lucide="facebook"
-                  class="lucide lucide-facebook w-4 h-4 stroke-[1.5]"
-                >
-                  <path
-                    d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
-                  ></path></svg
-              ></a>
-              <a
-                href="#"
-                class="transition-colors text-slate-400 hover:text-slate-900"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  data-lucide="instagram"
-                  class="lucide lucide-instagram w-4 h-4 stroke-[1.5]"
-                >
-                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
-                  <path
-                    d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
-                  ></path>
-                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg
-              ></a>
-              <a
-                href="#"
-                class="transition-colors text-slate-400 hover:text-slate-900"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  data-lucide="twitter"
-                  class="lucide lucide-twitter w-4 h-4 stroke-[1.5]"
-                >
-                  <path
-                    d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"
-                  ></path></svg
-              ></a>
+            <div
+              class="inline-block px-2 py-1 bg-slate-900 rounded text-[10px] font-mono text-slate-500 border border-slate-800"
+            >
+              MVP
             </div>
           </div>
-
+          <!-- Quick Links -->
           <div>
-            <h4
-              class="font-semibold text-xs mb-4 uppercase tracking-wider text-slate-900"
-            >
-              Services
-            </h4>
-            <ul class="space-y-3 text-xs text-slate-500 font-medium">
+            <h4 class="font-semibold text-sm text-white mb-4">Explore</h4>
+            <ul class="space-y-3 text-sm">
               <li>
-                <a href="#" class="transition-colors hover:text-teal-600"
-                  >Elderly Care</a
+                <a class="hover:text-white transition-colors" href="#top"
+                  >Home</a
                 >
               </li>
               <li>
-                <a href="#" class="transition-colors hover:text-teal-600"
-                  >Child Care</a
+                <a class="hover:text-white transition-colors" href="#process"
+                  >How it Works</a
                 >
               </li>
               <li>
-                <a href="#" class="transition-colors hover:text-teal-600"
-                  >Nursing</a
+                <a class="hover:text-white transition-colors" href="#safety"
+                  >Trust &amp; Safety</a
                 >
               </li>
             </ul>
           </div>
-
+          <!-- Legal -->
           <div>
-            <h4
-              class="font-semibold text-xs mb-4 uppercase tracking-wider text-slate-900"
-            >
-              Company
-            </h4>
-            <ul class="space-y-3 text-xs text-slate-500 font-medium">
+            <h4 class="font-semibold text-sm text-white mb-4">Legal</h4>
+            <ul class="space-y-3 text-sm">
               <li>
-                <a href="#" class="transition-colors hover:text-teal-600"
-                  >About Us</a
-                >
-              </li>
-              <li>
-                <a href="#" class="transition-colors hover:text-teal-600"
-                  >Careers</a
-                >
-              </li>
-              <li>
-                <a href="#" class="transition-colors hover:text-teal-600"
-                  >Safety Standards</a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4
-              class="font-semibold text-xs mb-4 uppercase tracking-wider text-slate-900"
-            >
-              Legal
-            </h4>
-            <ul class="space-y-3 text-xs text-slate-500 font-medium">
-              <li>
-                <a href="#" class="transition-colors hover:text-teal-600"
+                <a class="hover:text-white transition-colors" href="#waitlist"
                   >Privacy Policy</a
                 >
               </li>
               <li>
-                <a href="#" class="transition-colors hover:text-teal-600"
-                  >Terms of Service</a
-                >
-              </li>
-              <li>
-                <a href="#" class="transition-colors hover:text-teal-600"
-                  >Cookie Policy</a
+                <a class="hover:text-white transition-colors" href="#waitlist"
+                  >Terms of Use</a
                 >
               </li>
             </ul>
           </div>
+          <!-- Contact -->
+          <div>
+            <h4 class="font-semibold text-sm text-white mb-4">Contact</h4>
+            <ul class="space-y-3 text-sm">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4" data-lucide="mail"></svg> hello@carenest.lk
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4" data-lucide="map-pin"></svg> Sri Lanka
+              </li>
+            </ul>
+          </div>
         </div>
-
+        <!-- Bottom Bar -->
         <div
-          class="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4 border-slate-200"
+          class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
         >
-          <p class="text-xs text-slate-400">
-            © 2024 Carenest. All rights reserved.
+          <p class="text-xs text-slate-600">
+            © 2025 Carenest. All rights reserved.
           </p>
-          <div class="flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></div>
-            <span class="text-xs text-slate-500">System Operational</span>
+          <div
+            class="px-3 py-2 bg-red-950/30 text-red-400 rounded-md border border-red-900/50 flex items-start gap-2 max-w-md"
+          >
+            <svg
+              class="w-4 h-4 shrink-0 mt-0.5"
+              data-lucide="alert-circle"
+            ></svg>
+            <p class="text-[10px] leading-tight">
+              Not for emergencies. If you need urgent medical help, please
+              contact <b>1990</b> or local emergency services immediately.
+            </p>
           </div>
         </div>
       </div>
     </footer>
-
     <!-- Scripts -->
     <script>
-      // Initialize Icons
+      // Initialize Lucide Icons
       lucide.createIcons();
 
-      // Stats Counter Animation
-      document.addEventListener("DOMContentLoaded", () => {
-        const counters = document.querySelectorAll(".counter");
+      // Form Handling
+      const form = document.getElementById("waitlist-form");
+      const successMsg = document.getElementById("form-success");
 
-        const animateCounter = (el) => {
-          const target = +el.getAttribute("data-target");
-          const duration = 2000;
-          const start = 0;
-          const startTime = performance.now();
-
-          function update(currentTime) {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const ease = 1 - Math.pow(1 - progress, 4); // EaseOutQuart
-
-            const current = Math.floor(start + (target - start) * ease);
-            el.innerText = current;
-
-            if (progress < 1) {
-              requestAnimationFrame(update);
-            } else {
-              el.innerText = target;
-            }
-          }
-
-          requestAnimationFrame(update);
+      if (form) {
+        form.onsubmit = (e) => {
+          e.preventDefault();
+          form.classList.add("opacity-50", "pointer-events-none");
+          successMsg.classList.remove("hidden");
         };
+      }
 
-        const observer = new IntersectionObserver(
+      // Timeline Animation Logic
+      const timelineSection = document.getElementById("process");
+      const line = document.getElementById("timeline-line");
+      const steps = document.querySelectorAll(".timeline-step");
+      const dots = document.querySelectorAll(".step-dot");
+
+      const observerOptions = {
+        threshold: 0.2,
+        rootMargin: "0px 0px -100px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Draw the line
+            line.style.height = "100%";
+
+            // Stagger reveal steps
+            steps.forEach((step, index) => {
+              setTimeout(() => {
+                step.classList.add("visible");
+                // Light up the dots matching the index
+                const dot = dots[index];
+                if (dot) dot.classList.replace("bg-slate-200", "bg-teal-500");
+              }, index * 400); // 400ms delay between each
+            });
+
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      if (timelineSection) {
+        observer.observe(timelineSection);
+      }
+    </script>
+
+    <script>
+      (function () {
+        const targets = document.querySelectorAll(".reveal, .stagger");
+        if (!("IntersectionObserver" in window)) {
+          targets.forEach((el) => el.classList.add("is-visible"));
+          return;
+        }
+
+        const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                animateCounter(entry.target);
-                observer.unobserve(entry.target);
+                entry.target.classList.add("is-visible");
+                io.unobserve(entry.target); // reveal once for a clean, professional feel
               }
             });
           },
-          { threshold: 0.5 }
+          { threshold: 0.14, rootMargin: "0px 0px -12% 0px" }
         );
 
-        counters.forEach((counter) => observer.observe(counter));
-      });
+        targets.forEach((el) => io.observe(el));
+      })();
     </script>
   </body>
 </html>
